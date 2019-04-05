@@ -1,0 +1,4 @@
+{
+    "modules": ["shooting_game"],
+    "chess_engin": "/usr/bin/swordfish"
+}
