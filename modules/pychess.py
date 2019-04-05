@@ -8,6 +8,7 @@ from time import sleep
 
 x_to_col = {0:'a', 1:'b', 2:'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'}
 
+# initializations
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((60*8, 60*8))
@@ -21,15 +22,17 @@ screen.blit(bg, (0,0))
 clock.tick(60)
 
 board = chess.Board()
-board.legal_moves
 
+# load engine
 with open('config.json',  'r') as f:
     engine_path = json.load(f)['chess_engine']
     engine = chess.engine.SimpleEngine.popen_uci(engine_path)
 
+# convert two mouse coords into a uci move
 def mouse_to_uci(mouse1, mouse2):
     return '{}{}{}{}'.format(x_to_col[mouse1[0]], 8 - mouse1[1], x_to_col[mouse2[0]], 8 - mouse2[1])
 
+# convert fen into a 3d array representation of the board
 def parse_fen(fen):
     board_array = []
     fen_board = fen.split()[0].split('/')
@@ -47,6 +50,7 @@ def parse_fen(fen):
 
     return board_array
 
+# draw board from an array
 def draw_board(array):
     sprite_list = pygame.sprite.Group()
 
@@ -83,12 +87,14 @@ def draw_board(array):
     sprite_list.draw(screen)
     clock.tick(60)
 
+# get coords of mouse click
 def select_square():
     pos = pygame.mouse.get_pos()
     x = pos[0] // 60
     y = pos[1] // 60
     return (x, y)
 
+# write a message
 def write_message(text):
     textfont = pygame.font.Font(None,40)
     text = textfont.render(text,True, (155,0,255))
@@ -97,6 +103,7 @@ def write_message(text):
     screen.blit(text,textpos)
     pygame.display.update()
 
+# main game loop
 def run_game():
 
     turn = 'player'
@@ -110,24 +117,33 @@ def run_game():
 
     while not board.is_game_over():
 
+        # player turn
         if turn == 'player':
+
+            # check notification
             if board.is_check():
                 write_message('You are in check')
 
+            # quit game 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     engine.quit()
                     sys.exit()
 
+                # select first square
                 elif event.type == pygame.MOUSEBUTTONDOWN and not selected:
                     mouse1 = select_square()
                     selected = True
 
+                # select second square
                 elif event.type == pygame.MOUSEBUTTONDOWN and selected:
                     mouse2 = select_square()
 
+                    # generate uci string
                     move = mouse_to_uci(mouse1, mouse2)
+
+                    # push move to board and validate move
                     try:
                         board.push_uci(move)
                         selected = False
@@ -138,6 +154,7 @@ def run_game():
                         write_message('Invalid Move')
                         sleep(1)
 
+        # AI turn
         elif turn == 'AI':
             result = engine.play(board, chess.engine.Limit(time=0.100))
             board.push(result.move)
@@ -146,12 +163,14 @@ def run_game():
         draw_board(parse_fen(board.fen()))
         pygame.display.update()
 
-    write_message('Game over')
+    # quit game after checkmate
+    write_message('Checkmate')
     sleep(5)
     pygame.quit()
     engine.quit()
     sys.exit()
 
+# required to run from main.py
 def start():
     run_game()
 

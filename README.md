@@ -7,3 +7,10 @@ Dependancies
  - pygame
  - python-chess
  - stockfish
+
+Sources
+ - https://www.youtube.com/watch?v=05eq8QCuxLU
+ - https://www.youtube.com/watch?v=16LkXpZ4mKU
+ - https://www.pygame.org/docs/
+ - https://python-chess.readthedocs.io/en/latest/index.html
+

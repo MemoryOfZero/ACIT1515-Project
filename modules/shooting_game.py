@@ -182,9 +182,3 @@ def start():
 if __name__ == '__main__':
     start()
 
-"""
-Source : https://www.youtube.com/watch?v=05eq8QCuxLU
-         https://www.youtube.com/watch?v=16LkXpZ4mKU
-
-
-"""
