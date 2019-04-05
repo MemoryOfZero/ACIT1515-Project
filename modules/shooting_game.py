@@ -2,6 +2,7 @@ import pygame
 import sys
 from time import sleep
 import random
+
 rock_image = ['assets/rock01.png','assets/rock02.png','assets/rock03.png','assets/rock04.png']
 pad_width = 480
 pad_height = 640
@@ -41,7 +42,6 @@ def draw_object(obj, x,y ):                                 # drawing objects
     global gamePad
     gamePad.blit(obj, (x,y))
 
-
 def initGame():
     global gamePad, clock , background , fighter , missile, explosion
     pygame.init()
@@ -52,8 +52,6 @@ def initGame():
     missile = pygame.image.load('assets/missile.png')
     explosion = pygame.image.load('assets/explosion.png')
     clock = pygame.time.Clock()
-
-
 
 def runGame():
     global gamePad, clock , background , fighter , missile, explosion
@@ -81,7 +79,6 @@ def runGame():
     shotcount = 0
     rockpassed = 0
 
-
     ongame = False
     while not ongame:
 
@@ -106,9 +103,6 @@ def runGame():
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     fighterX = 0
 
-
-
-
         draw_object(background, 0, 0)
 
         x += fighterX
@@ -117,18 +111,12 @@ def runGame():
         elif x > pad_width - fighterWidth:
             x = pad_width - fighterWidth
 
-
-
         draw_object(fighter, x ,y)
-
-
-
 
         if len(missileXY) != 0:
             for i,bxy in enumerate(missileXY):                 #repetition of missiles
                 bxy[1] -= 10                                   # y - 10
                 missileXY[i][1] = bxy[1]
-
 
                 if bxy[1] < rock_y:                                         #hit the rock
                     if bxy[0] > rock_x and bxy[0] < rock_x + rockwidth:
@@ -136,12 +124,12 @@ def runGame():
                         isshot = True
                         shotcount += 1
 
-
                 if bxy[1] <= 0:
                     try:
                         missileXY.remove(bxy)
                     except:
                         pass
+
         if len(missileXY) != 0:
             for bx, by in missileXY:
                 draw_object(missile, bx, by)
@@ -159,10 +147,11 @@ def runGame():
             rockpassed += 1
 
         writepassed(rockpassed)
+
         if rockpassed == 3:
             gameover()
-        if isshot:
 
+        if isshot:
             draw_object(explosion, rock_x, rock_y)
 
             rock = pygame.image.load(random.choice(rock_image))
@@ -174,6 +163,7 @@ def runGame():
             isshot = False
 
             rockspeed += 0.2
+
             if rockspeed >= 10:
                 rockspeed = 10
 

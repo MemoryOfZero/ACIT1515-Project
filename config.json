@@ -1,4 +1,4 @@
 {
-    "modules": ["shooting_game"],
-    "chess_engin": "/usr/bin/swordfish"
+    "modules": ["shooting_game", "pychess"],
+    "chess_engine": "/usr/bin/stockfish"
 }
